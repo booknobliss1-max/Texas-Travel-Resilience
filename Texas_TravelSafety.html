@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Texas Travel Resilience Mini-Course</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050816;
+      --panel: #0b1020;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+      --success: #4ade80;
+      --border: #1f2933;
+      --radius: 10px;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(145deg, #020617 0, #020617 40%, #020617 100%);
+      border-radius: 18px;
+      border: 1px solid #1f2937;
+      box-shadow: var(--shadow);
+      padding: 22px 22px 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.12), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(244, 114, 182, 0.12), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .app-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .title-block h1 {
+      font-size: 1.6rem;
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .title-pill {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 3px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .title-pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: radial-gradient(circle, var(--accent) 0, transparent 70%);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.9);
+    }
+
+    .title-block p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-top: 4px;
+    }
+
+    .meta {
+      text-align: right;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .meta-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      margin-bottom: 4px;
+    }
+
+    .meta-tag span {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .progress-bar {
+      margin: 10px 0 18px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22c55e, #38bdf8);
+      transition: width 0.35s ease-out;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 840px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .meta {
+        text-align: left;
+      }
+    }
+
+    .sidebar {
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.9), #020617);
+      border-radius: var(--radius);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 10px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.8);
+    }
+
+    .sidebar h2 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .module-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .module-item {
+      border-radius: 8px;
+      padding: 7px 8px;
+      border: 1px solid transparent;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.9);
+      transition: border 0.2s, background 0.2s, transform 0.1s;
+    }
+
+    .module-item:hover {
+      border-color: rgba(56, 189, 248, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .module-item.active {
+      border-color: var(--accent);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.25), rgba(15, 23, 42, 0.95));
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
+    }
+
+    .module-title {
+      font-weight: 500;
+    }
+
+    .module-meta {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .module-status {
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--muted);
+    }
+
+    .module-status.done {
+      border-color: rgba(74, 222, 128, 0.7);
+      color: var(--success);
+    }
+
+    .module-status.current {
+      border-color: rgba(56, 189, 248, 0.7);
+      color: var(--accent);
+    }
+
+    .sidebar-footer {
+      font-size: 0.75rem;
+      color: var(--muted);
+      border-top: 1px dashed rgba(55, 65, 81, 0.9);
+      padding-top: 8px;
+      margin-top: 6px;
+    }
+
+    .sidebar-footer strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .content {
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent 55%),
+        rgba(15, 23, 42, 0.98);
+      border-radius: var(--radius);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 14px 14px 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.9);
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .content-header h2 {
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .content-tagline {
+      font-size: 0.8rem;
+      color: var(--muted);
+      max-width: 420px;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .pill span {
+      color: var(--accent);
+    }
+
+    .content-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 840px) {
+      .content-body {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .panel {
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 10px;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 10px;
+      font-size: 0.85rem;
+    }
+
+    .panel h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .panel p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      cursor: pointer;
+      transition: background 0.15s, border 0.15s;
+    }
+
+    .checklist-item input {
+      accent-color: var(--accent);
+    }
+
+    .checklist-item.done {
+      border-color: rgba(74, 222, 128, 0.7);
+      background: rgba(22, 163, 74, 0.08);
+    }
+
+    .checklist-item span {
+      flex: 1;
+    }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .map-tile {
+      border-radius: 8px;
+      padding: 6px;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.18), rgba(15, 23, 42, 0.95));
+      font-size: 0.75rem;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.1s, border 0.15s, box-shadow 0.15s;
+    }
+
+    .map-tile:hover {
+      transform: translateY(-1px);
+      border-color: rgba(56, 189, 248, 0.7);
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
+    }
+
+    .map-tile.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9), 0 0 18px rgba(56, 189, 248, 0.4);
+    }
+
+    .map-output {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      padding: 6px;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px dashed rgba(55, 65, 81, 0.9);
+      min-height: 40px;
+    }
+
+    .quiz {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .quiz-question {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .quiz-option {
+      padding: 5px 7px;
+      border-radius: 6px;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.15s, border 0.15s;
+    }
+
+    .quiz-option:hover {
+      border-color: rgba(56, 189, 248, 0.7);
+    }
+
+    .quiz-option.correct {
+      border-color: rgba(74, 222, 128, 0.8);
+      background: rgba(22, 163, 74, 0.12);
+    }
+
+    .quiz-option.incorrect {
+      border-color: rgba(248, 113, 113, 0.8);
+      background: rgba(185, 28, 28, 0.12);
+    }
+
+    .quiz-feedback {
+      font-size: 0.8rem;
+      margin-top: 2px;
+      min-height: 18px;
+    }
+
+    .quiz-feedback.ok {
+      color: var(--success);
+    }
+
+    .quiz-feedback.bad {
+      color: var(--danger);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .controls-left {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .controls-right {
+      display: flex;
+      gap: 6px;
+    }
+
+    button {
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text);
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, border 0.15s, transform 0.1s;
+    }
+
+    button.primary {
+      border-color: rgba(56, 189, 248, 0.9);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.3), rgba(15, 23, 42, 0.95));
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(56, 189, 248, 0.8);
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: default;
+      transform: none;
+    }
+
+    .time-pill {
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.75rem;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.9);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="app-inner">
+      <header>
+        <div class="title-block">
+          <div class="title-pill">
+            <span class="title-pill-dot"></span>
+            TEXAS TRAVEL RESILIENCE · MINI-COURSE
+          </div>
+          <h1>
+            Texas Travel Resilience
+            <span style="font-size:0.9rem;color:var(--accent);font-weight:500;">Self‑Paced · 1 Hour</span>
+          </h1>
+          <p>
+            Blend the official Texas Travel Guide with emergency preparedness, cultural context, and practical checklists—
+            all inside an interactive browser-based experience.
+          </p>
+        </div>
+        <div class="meta">
+          <div class="meta-tag">
+            <span>Mode</span> Self‑paced · Browser‑native
+          </div>
+          <div class="meta-tag">
+            <span>Focus</span> Travel guide · Safety · Culture
+          </div>
+        </div>
+      </header>
+
+      <div class="progress-bar">
+        <div class="progress-label">
+          <span>Course progress</span>
+          <span id="progressText">0% complete</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+          <h2>Modules</h2>
+          <ul class="module-list" id="moduleList">
+            <!-- Filled by JS -->
+          </ul>
+          <div class="sidebar-footer">
+            <strong>Tip:</strong> You can complete modules in any order. Aim for about 15 minutes per module.
+          </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="content">
+          <div class="content-header">
+            <div>
+              <h2 id="moduleTitle">Welcome</h2>
+              <p class="content-tagline" id="moduleTagline">
+                Select a module on the left to begin your Texas Travel Resilience journey.
+              </p>
+            </div>
+            <div>
+              <div class="pill">
+                MODULE <span id="moduleIndex">–</span> · <span id="moduleDuration">–</span> min
+              </div>
+            </div>
+          </div>
+
+          <div class="content-body" id="contentBody">
+            <!-- Left: narrative + context -->
+            <section class="panel">
+              <h3>Overview</h3>
+              <p>
+                This mini-course is designed to sit alongside your Texas Travel Guide. Each module blends:
+              </p>
+              <ul class="checklist">
+                <li class="checklist-item done">
+                  <span>Travel guide insights</span>
+                </li>
+                <li class="checklist-item done">
+                  <span>Emergency preparedness moves you can actually use</span>
+                </li>
+                <li class="checklist-item done">
+                  <span>Cultural context so the trip feels grounded, not generic</span>
+                </li>
+                <li class="checklist-item done">
+                  <span>Interactive browser-based demos you can revisit anytime</span>
+                </li>
+              </ul>
+              <div class="tags-row">
+                <div class="tag">Texas Travel Guide</div>
+                <div class="tag">Resilience</div>
+                <div class="tag">Family-friendly</div>
+                <div class="tag">Self-paced</div>
+              </div>
+            </section>
+
+            <!-- Right: placeholder interaction -->
+            <section class="panel">
+              <h3>Interactive demo</h3>
+              <p>
+                When you select a module, this panel will transform into a focused interactive activity:
+                map reading, storm safety decisions, packing checklists, or region exploration.
+              </p>
+              <p style="margin-top:4px;">
+                Start by choosing <strong>“How to Read a Map Like a Texan”</strong> in the module list.
+              </p>
+            </section>
+          </div>
+
+          <div class="controls">
+            <div class="controls-left">
+              <span class="time-pill" id="timePill">Estimated time: 60 minutes total</span>
+            </div>
+            <div class="controls-right">
+              <button id="prevBtn" disabled>&larr; Previous</button>
+              <button id="nextBtn" class="primary" disabled>Next module &rarr;</button>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Course data model ----------------------------------------------------
+    const modules = [
+      {
+        id: "map-texan",
+        title: "How to Read a Map Like a Texan",
+        duration: 15,
+        tagline:
+          "Use the Texas Travel Guide and free maps to quickly orient yourself—roads, regions, and risk at a glance.",
+        tags: ["Maps", "Navigation", "Travel Guide"],
+        checklist: [
+          "Locate your current region on a Texas map",
+          "Identify at least two alternate routes between two cities",
+          "Mark a safe meetup point off the main highway",
+        ],
+      },
+      {
+        id: "storm-safety",
+        title: "Storm Safety for Travelers",
+        duration: 15,
+        tagline:
+          "Blend weather awareness with on-the-road decision making so storms become a planning input, not a panic trigger.",
+        tags: ["Weather", "Safety", "Decision-making"],
+        checklist: [
+          "Identify your primary weather alert source while traveling",
+          "Choose a safe shelter type for severe storms",
+          "Create a simple ‘pull over’ decision rule for your trips",
+        ],
+      },
+      {
+        id: "packing-heat-hills",
+        title: "Packing for Heat, Hills, and Highways",
+        duration: 15,
+        tagline:
+          "Build a Texas-ready packing list that respects heat, distance, and the realities of long stretches between services.",
+        tags: ["Packing", "Heat", "Highways"],
+        checklist: [
+          "List three heat-specific items you’ll always pack",
+          "Define your minimum water per person for day trips",
+          "Add one ‘comfort + culture’ item to your kit",
+        ],
+      },
+      {
+        id: "regions-risks",
+        title: "Understanding Texas Regions and Risks",
+        duration: 15,
+        tagline:
+          "Connect Texas regions—Panhandle, Hill Country, Gulf Coast, and more—to the risks and cultures you’ll encounter.",
+        tags: ["Regions", "Risk", "Culture"],
+        checklist: [
+          "Match at least three regions to their primary risks",
+          "Note one cultural highlight per region you plan to visit",
+          "Choose a ‘home base’ region for future planning",
+        ],
+      },
+    ];
+
+    let currentIndex = 0;
+    const completion = new Set(); // module ids marked complete
+
+    // --- DOM references -------------------------------------------------------
+    const moduleListEl = document.getElementById("moduleList");
+    const moduleTitleEl = document.getElementById("moduleTitle");
+    const moduleTaglineEl = document.getElementById("moduleTagline");
+    const moduleIndexEl = document.getElementById("moduleIndex");
+    const moduleDurationEl = document.getElementById("moduleDuration");
+    const contentBodyEl = document.getElementById("contentBody");
+    const progressFillEl = document.getElementById("progressFill");
+    const progressTextEl = document.getElementById("progressText");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const timePill = document.getElementById("timePill");
+
+    // --- Helpers --------------------------------------------------------------
+    function renderSidebar() {
+      moduleListEl.innerHTML = "";
+      modules.forEach((mod, idx) => {
+        const li = document.createElement("li");
+        li.className = "module-item" + (idx === currentIndex ? " active" : "");
+        li.dataset.index = idx;
+
+        const left = document.createElement("div");
+        const title = document.createElement("div");
+        title.className = "module-title";
+        title.textContent = mod.title;
+        const meta = document.createElement("div");
+        meta.className = "module-meta";
+        meta.textContent = `Module ${idx + 1} · ${mod.duration} min`;
+        left.appendChild(title);
+        left.appendChild(meta);
+
+        const status = document.createElement("div");
+        status.className = "module-status";
+        if (completion.has(mod.id)) {
+          status.classList.add("done");
+          status.textContent = "Done";
+        } else if (idx === currentIndex) {
+          status.classList.add("current");
+          status.textContent = "In progress";
+        } else {
+          status.textContent = "Not started";
+        }
+
+        li.appendChild(left);
+        li.appendChild(status);
+        li.addEventListener("click", () => {
+          currentIndex = idx;
+          renderAll();
+        });
+
+        moduleListEl.appendChild(li);
+      });
+    }
+
+    function renderProgress() {
+      const percent = Math.round((completion.size / modules.length) * 100);
+      progressFillEl.style.width = percent + "%";
+      progressTextEl.textContent = `${percent}% complete`;
+    }
+
+    function renderHeader() {
+      const mod = modules[currentIndex];
+      moduleTitleEl.textContent = mod.title;
+      moduleTaglineEl.textContent = mod.tagline;
+      moduleIndexEl.textContent = `${currentIndex + 1}/${modules.length}`;
+      moduleDurationEl.textContent = mod.duration;
+      const total = modules.reduce((sum, m) => sum + m.duration, 0);
+      timePill.textContent = `Estimated time: ${total} minutes total`;
+    }
+
+    function renderContent() {
+      const mod = modules[currentIndex];
+      contentBodyEl.innerHTML = "";
+
+      // LEFT PANEL: narrative + checklist
+      const left = document.createElement("section");
+      left.className = "panel";
+
+      const h3 = document.createElement("h3");
+      h3.textContent = "Context & checklist";
+      left.appendChild(h3);
+
+      const p = document.createElement("p");
+      p.textContent =
+        currentIndex === 0
+          ? "Use your Texas Travel Guide or a free state map. This module trains your eyes to see routes, regions, and safe fallback options quickly."
+          : currentIndex === 1
+          ? "Storms are part of Texas. This module helps you pre-decide how you’ll respond so you’re not improvising in the moment."
+          : currentIndex === 2
+          ? "Packing for Texas means respecting heat, distance, and culture. Think in layers: safety, comfort, and connection."
+          : "Texas is huge. Each region carries its own risks and cultural rhythms. You’ll map where you’re going and what that implies.";
+      left.appendChild(p);
+
+      const checklistTitle = document.createElement("p");
+      checklistTitle.style.marginTop = "4px";
+      checklistTitle.textContent = "Mark items complete as you go:";
+      left.appendChild(checklistTitle);
+
+      const ul = document.createElement("ul");
+      ul.className = "checklist";
+
+      mod.checklist.forEach((item, idx) => {
+        const li = document.createElement("li");
+        li.className = "checklist-item";
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.id = `chk-${mod.id}-${idx}`;
+        const span = document.createElement("span");
+        span.textContent = item;
+
+        input.addEventListener("change", () => {
+          li.classList.toggle("done", input.checked);
+          // If all checklist items checked, mark module complete
+          const allChecked = Array.from(
+            ul.querySelectorAll("input[type='checkbox']")
+          ).every((c) => c.checked);
+          if (allChecked) {
+            completion.add(mod.id);
+          } else {
+            completion.delete(mod.id);
+          }
+          renderSidebar();
+          renderProgress();
+        });
+
+        li.appendChild(input);
+        li.appendChild(span);
+        ul.appendChild(li);
+      });
+
+      left.appendChild(ul);
+
+      const tagsRow = document.createElement("div");
+      tagsRow.className = "tags-row";
+      mod.tags.forEach((t) => {
+        const tag = document.createElement("div");
+        tag.className = "tag";
+        tag.textContent = t;
+        tagsRow.appendChild(tag);
+      });
+      const tag2 = document.createElement("div");
+      tag2.className = "tag";
+      tag2.textContent = "Texas Travel Guide";
+      tagsRow.appendChild(tag2);
+
+      left.appendChild(tagsRow);
+
+      // RIGHT PANEL: interactive demo varies by module
+      const right = document.createElement("section");
+      right.className = "panel";
+
+      if (mod.id === "map-texan") {
+        right.innerHTML = `
+          <h3>Interactive map reading drill</h3>
+          <p>Imagine you’re planning a drive using your Texas Travel Guide or a free state map. Pick a region and we’ll suggest what to scan for first.</p>
+          <div class="map-grid">
+            <div class="map-tile" data-region="Panhandle">Panhandle</div>
+            <div class="map-tile" data-region="Hill Country">Hill Country</div>
+            <div class="map-tile" data-region="Gulf Coast">Gulf Coast</div>
+            <div class="map-tile" data-region="West Texas">West Texas</div>
+            <div class="map-tile" data-region="Piney Woods">Piney Woods</div>
+            <div class="map-tile" data-region="South Texas">South Texas</div>
+          </div>
+          <div class="map-output" id="mapOutput">
+            Choose a region tile above. Then, on your real map, find: (1) main highways, (2) alternate routes, (3) a safe meetup point.
+          </div>
+        `;
+        const tiles = right.querySelectorAll(".map-tile");
+        const output = right.querySelector("#mapOutput");
+        tiles.forEach((tile) => {
+          tile.addEventListener("click", () => {
+            tiles.forEach((t) => t.classList.remove("active"));
+            tile.classList.add("active");
+            const region = tile.dataset.region;
+            let text = "";
+            switch (region) {
+              case "Panhandle":
+                text =
+                  "Panhandle: Long, straight stretches and fast-changing weather. On your map, trace alternate routes that avoid long exposed segments and note small towns with services.";
+                break;
+              case "Hill Country":
+                text =
+                  "Hill Country: Winding roads and elevation changes. Look for low-water crossings, river-adjacent roads, and note higher ground meetup spots.";
+                break;
+              case "Gulf Coast":
+                text =
+                  "Gulf Coast: Storm surge and evacuation routes matter. Find official evacuation routes, bridges, and inland fallback towns.";
+                break;
+              case "West Texas":
+                text =
+                  "West Texas: Big distances between services. Mark fuel stops, rest areas, and any towns with medical facilities.";
+                break;
+              case "Piney Woods":
+                text =
+                  "Piney Woods: Trees, backroads, and flash flood potential. Identify main arteries and avoid low-lying creek crossings in heavy rain.";
+                break;
+              case "South Texas":
+                text =
+                  "South Texas: Heat and border proximity. Note rest areas, shade options, and towns with 24-hour services.";
+                break;
+            }
+            output.textContent = text;
+          });
+        });
+      } else if (mod.id === "storm-safety") {
+        right.innerHTML = `
+          <h3>Storm safety scenario</h3>
+          <p>You’re on a Texas highway and receive a severe thunderstorm warning on your phone. What’s your first move?</p>
+          <div class="quiz">
+            <div class="quiz-question">
+              Choose the best first action:
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-option" data-correct="false">
+                Keep driving at the same speed and hope it passes quickly.
+              </div>
+              <div class="quiz-option" data-correct="true">
+                Safely pull over at the next exit or rest area and check an official weather source.
+              </div>
+              <div class="quiz-option" data-correct="false">
+                Stop immediately in the travel lane with your hazard lights on.
+              </div>
+            </div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+          </div>
+        `;
+        const options = right.querySelectorAll(".quiz-option");
+        const feedback = right.querySelector("#quizFeedback");
+        options.forEach((opt) => {
+          opt.addEventListener("click", () => {
+            options.forEach((o) => o.classList.remove("correct", "incorrect"));
+            const correct = opt.dataset.correct === "true";
+            if (correct) {
+              opt.classList.add("correct");
+              feedback.textContent =
+                "Yes. Get safely off the main flow of traffic, then use official alerts to decide your next move.";
+              feedback.className = "quiz-feedback ok";
+            } else {
+              opt.classList.add("incorrect");
+              feedback.textContent =
+                "Not ideal. In storms, you want to reduce speed safely, avoid stopping in travel lanes, and use official alerts.";
+              feedback.className = "quiz-feedback bad";
+            }
+          });
+        });
+      } else if (mod.id === "packing-heat-hills") {
+        right.innerHTML = `
+          <h3>Packing checklist builder</h3>
+          <p>Toggle items to build a Texas-ready micro kit. Use this as a draft for your real packing list.</p>
+          <ul class="checklist" id="packingList">
+            <li class="checklist-item"><input type="checkbox" /> <span>2–3 liters of water per person for day trips</span></li>
+            <li class="checklist-item"><input type="checkbox" /> <span>Wide-brim hat or sun protection</span></li>
+            <li class="checklist-item"><input type="checkbox" /> <span>Electrolyte packets or salty snacks</span></li>
+            <li class="checklist-item"><input type="checkbox" /> <span>Paper map or printed route backup</span></li>
+            <li class="checklist-item"><input type="checkbox" /> <span>Basic first aid kit</span></li>
+            <li class="checklist-item"><input type="checkbox" /> <span>One “culture” item (local book, playlist, or story prompt)</span></li>
+          </ul>
+        `;
+        const items = right.querySelectorAll(".checklist-item");
+        items.forEach((item) => {
+          const input = item.querySelector("input");
+          input.addEventListener("change", () => {
+            item.classList.toggle("done", input.checked);
+          });
+        });
+      } else if (mod.id === "regions-risks") {
+        right.innerHTML = `
+          <h3>Regions & risks explorer</h3>
+          <p>Select a region to see a quick pairing of risk + culture. Use this to annotate your Texas Travel Guide.</p>
+          <div class="map-grid">
+            <div class="map-tile" data-region="Panhandle">Panhandle</div>
+            <div class="map-tile" data-region="Hill Country">Hill Country</div>
+            <div class="map-tile" data-region="Gulf Coast">Gulf Coast</div>
+            <div class="map-tile" data-region="West Texas">West Texas</div>
+            <div class="map-tile" data-region="Piney Woods">Piney Woods</div>
+            <div class="map-tile" data-region="South Texas">South Texas</div>
+          </div>
+          <div class="map-output" id="regionOutput">
+            Pick a region to see one primary risk and one cultural highlight you can look for in your guide.
+          </div>
+        `;
+        const tiles = right.querySelectorAll(".map-tile");
+        const output = right.querySelector("#regionOutput");
+        tiles.forEach((tile) => {
+          tile.addEventListener("click", () => {
+            tiles.forEach((t) => t.classList.remove("active"));
+            tile.classList.add("active");
+            const region = tile.dataset.region;
+            let text = "";
+            switch (region) {
+              case "Panhandle":
+                text =
+                  "Panhandle · Risk: High winds and sudden storms. Culture: Route 66 history, small-town diners, and wide-open skies.";
+                break;
+              case "Hill Country":
+                text =
+                  "Hill Country · Risk: Flash flooding in low-water crossings. Culture: Rivers, live music, and small-town squares.";
+                break;
+              case "Gulf Coast":
+                text =
+                  "Gulf Coast · Risk: Hurricanes and storm surge. Culture: Seafood, beach towns, and coastal birding.";
+                break;
+              case "West Texas":
+                text =
+                  "West Texas · Risk: Long distances and limited services. Culture: Dark skies, desert art, and national parks.";
+                break;
+              case "Piney Woods":
+                text =
+                  "Piney Woods · Risk: Heavy rain and treefall in storms. Culture: Forest trails, lakes, and quiet backroads.";
+                break;
+              case "South Texas":
+                text =
+                  "South Texas · Risk: Extreme heat. Culture: Borderland food, bilingual communities, and vibrant plazas.";
+                break;
+            }
+            output.textContent = text;
+          });
+        });
+      }
+
+      contentBodyEl.appendChild(left);
+      contentBodyEl.appendChild(right);
+    }
+
+    function renderControls() {
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === modules.length - 1;
+    }
+
+    function renderAll() {
+      renderSidebar();
+      renderHeader();
+      renderContent();
+      renderProgress();
+      renderControls();
+    }
+
+    // --- Navigation -----------------------------------------------------------
+    prevBtn.addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderAll();
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentIndex < modules.length - 1) {
+        currentIndex++;
+        renderAll();
+      }
+    });
+
+    // --- Init -----------------------------------------------------------------
+    // Start on first module
+    currentIndex = 0;
+    renderAll();
+  </script>
+</body>
+</html>
