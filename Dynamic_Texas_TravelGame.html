@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Texas Travel Resilience Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050816;
+      --panel: #0b1020;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+      --success: #4ade80;
+      --border: #1f2933;
+      --radius: 10px;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(145deg, #020617 0, #020617 40%, #020617 100%);
+      border-radius: 18px;
+      border: 1px solid #1f2937;
+      box-shadow: var(--shadow);
+      padding: 22px 22px 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.12), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(244, 114, 182, 0.12), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .app-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .title-block h1 {
+      font-size: 1.6rem;
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .title-pill {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 3px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .title-pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: radial-gradient(circle, var(--accent) 0, transparent 70%);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.9);
+    }
+
+    .title-block p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-top: 4px;
+    }
+
+    .meta {
+      text-align: right;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .meta-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      margin-bottom: 4px;
+    }
+
+    .meta-tag span {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 840px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .meta {
+        text-align: left;
+      }
+    }
+
+    .sidebar {
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.9), #020617);
+      border-radius: var(--radius);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 10px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.8);
+    }
+
+    .sidebar h2 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .module-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .module-item {
+      border-radius: 8px;
+      padding: 7px 8px;
+      border: 1px solid transparent;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.9);
+      transition: border 0.2s, background 0.2s, transform 0.1s;
+    }
+
+    .module-item:hover {
+      border-color: rgba(56, 189, 248, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .module-item.active {
+      border-color: var(--accent);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.25), rgba(15, 23, 42, 0.95));
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
+    }
+
+    .content {
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent 55%),
+        rgba(15, 23, 42, 0.98);
+      border-radius: var(--radius);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 14px 14px 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.9);
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel {
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 10px;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 10px;
+      font-size: 0.85rem;
+    }
+
+    button {
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text);
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, border 0.15s, transform 0.1s;
+      margin-top: 6px;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(56, 189, 248, 0.8);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="app-inner">
+      <header>
+        <div class="title-block">
+          <div class="title-pill">
+            <span class="title-pill-dot"></span>
+            TEXAS TRAVEL RESILIENCE · GAME MODE
+          </div>
+          <h1>Texas Travel Resilience Game</h1>
+          <p>Begin your journey across Texas. Make decisions. Build resilience. Learn the state.</p>
+        </div>
+        <div class="meta">
+          <div class="meta-tag">
+            <span>Mode</span> Interactive Journey
+          </div>
+        </div>
+      </header>
+
+      <div class="layout">
+        <aside class="sidebar">
+          <h2>Journey</h2>
+          <ul class="module-list" id="journeySidebar"></ul>
+          <a href="index.html" class="back-link">← Back to Main Page</a>
+        </aside>
+
+        <main class="content">
+          <div id="journeyContent" class="panel">
+            Loading...
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const journeyState = {
+      region: null,
+      step: 0,
+      safety: 0,
+      comfort: 0,
+      culture: 0,
+      time: 0,
+    };
+
+    const journeyRegions = [
+      { id: "panhandle", name: "Panhandle Plains", risk: "storms", bonus: "Route 66" },
+      { id: "hillcountry", name: "Hill Country", risk: "flooding", bonus: "rivers & music" },
+      { id: "gulfcoast", name: "Gulf Coast", risk: "hurricanes", bonus: "seafood & beaches" },
+      { id: "westtexas", name: "West Texas", risk: "distance", bonus: "dark skies" },
+      { id: "pineywoods", name: "Piney Woods", risk: "rain", bonus: "forest trails" },
+      { id: "southtexas", name: "South Texas Plains", risk: "heat", bonus: "border culture" },
+      { id: "prairies", name: "Prairies & Lakes", risk: "traffic", bonus: "big cities" },
+    ];
+
+    const journeyScenarios = [
+      {
+        id: "packing",
+        title: "Pack Your Texas Kit",
+        type: "choice",
+        description: "Choose the most important item to pack first.",
+        options: [
+          { text: "Water (2–3L)", safety: 2, feedback: "Correct. Texas heat requires hydration." },
+          { text: "Phone charger only", safety: -1, feedback: "Not enough. You need heat protection." },
+          { text: "Flip-flops", safety: -2, feedback: "Not safe for Texas terrain." },
+        ],
+      },
+      {
+        id: "storm",
+        title: "Storm on the Highway",
+        type: "choice",
+        description: "A severe thunderstorm warning hits between Amarillo and Lubbock.",
+        options: [
+          { text: "Keep driving at same speed", safety: -2, feedback: "Not safe." },
+          { text: "Stop in travel lane", safety: -3, feedback: "Very dangerous." },
+          { text: "Exit safely and check alerts", safety: 3, feedback: "Correct." },
+        ],
+      },
+      {
+        id: "distance",
+        title: "West Texas Distance Challenge",
+        type: "choice",
+        description: "You're driving El Paso → Big Bend (329 miles). Your tank gives 250 miles.",
+        options: [
+          { text: "Hope for a gas station", safety: -3, feedback: "Not safe." },
+          { text: "Refuel before leaving", safety: 3, feedback: "Correct." },
+        ],
+      },
+      {
+        id: "toll",
+        title: "Cashless Toll Road",
+        type: "choice",
+        description: "You enter a cashless toll road in a rental car.",
+        options: [
+          { text: "Pay cash at booth", safety: 0, feedback: "Incorrect." },
+          { text: "Rental company bills you", safety: 0, feedback: "Correct." },
+        ],
+      },
+      {
+        id: "regions",
+        title: "Match the Region",
+        type: "choice",
+        description: "Which region is known for hurricanes?",
+        options: [
+          { text: "Gulf Coast", culture: 1, feedback: "Correct." },
+          { text: "Panhandle", culture: 0, feedback: "Incorrect." },
+        ],
+      },
+    ];
+
+    function renderSidebar() {
+      const sidebar = document.getElementById("journeySidebar");
+      sidebar.innerHTML = "";
+
+      if (!journeyState.region) {
+        journeyRegions.forEach((r) => {
+          const li = document.createElement("li");
+          li.className = "module-item";
+          li.textContent = r.name;
+          li.onclick = () => {
+            journeyState.region = r;
+            renderAll();
+          };
+          sidebar.appendChild(li);
+        });
+        return;
+      }
+
+      journeyScenarios.forEach((sc, idx) => {
+        const li = document.createElement("li");
+        li.className = "module-item" + (idx === journeyState.step ? " active" : "");
+        li.textContent = sc.title;
+        sidebar.appendChild(li);
+      });
+    }
+
+    function renderContent() {
+      const content = document.getElementById("journeyContent");
+
+      if (!journeyState.region) {
+        content.innerHTML = `
+          <h3>Select Your Starting Region</h3>
+          <p>Choose where your Texas journey begins.</p>
+        `;
+        return;
+      }
+
+      const scenario = journeyScenarios[journeyState.step];
+
+      content.innerHTML = `
+        <h3>${scenario.title}</h3>
+        <p>${scenario.description}</p>
+      `;
+
+      scenario.options.forEach((opt) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt.text;
+        btn.onclick = () => {
+          journeyState.safety += opt.safety || 0;
+          journeyState.comfort += opt.comfort || 0;
+          journeyState.culture += opt.culture || 0;
+          journeyState.time += opt.time || 0;
+          alert(opt.feedback);
+          journeyState.step++;
+          if (journeyState.step >= journeyScenarios.length) {
+            renderFinal();
+          } else {
+            renderAll();
+          }
+        };
+        content.appendChild(btn);
+      });
+    }
+
+    function renderFinal() {
+  const content = document.getElementById("journeyContent");
+  const total = journeyState.safety + journeyState.comfort + journeyState.culture;
+
+  content.innerHTML = `
+    <h3>Your Texas Resilience Score</h3>
+    <p><strong>Safety:</strong> ${journeyState.safety}</p>
+    <p><strong>Comfort:</strong> ${journeyState.comfort}</p>
+    <p><strong>Culture:</strong> ${journeyState.culture}</p>
+    <p><strong>Total:</strong> ${total}</p>
+
+    <button onclick="restartJourney()">Play Again</button>
+
+    <a href="https://booknobliss1-max.github.io/Texas-Travel-Resilience/" 
+       class="back-link" 
+       style="display:block; margin-top:12px; color:#38bdf8; text-decoration:none;">
+       ← Back to Main Page
+    </a>
+  `;
+}
+
+    function restartJourney() {
+      journeyState.region = null;
+      journeyState.step = 0;
+      journeyState.safety = 0;
+      journeyState.comfort = 0;
+      journeyState.culture = 0;
+      journeyState.time = 0;
+      renderAll();
+    }
+
+    function renderAll() {
+      renderSidebar();
+      renderContent();
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
